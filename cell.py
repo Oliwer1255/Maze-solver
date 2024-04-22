@@ -3,7 +3,7 @@ from geometry import Point, Line
 
 class Cell:
 
-    def __init__(self, x1, y1, x2, y2, window):
+    def __init__(self, x1, y1, x2, y2, window=None):
         self.left_wall = True
         self.right_wall = True
         self.top_wall = True
@@ -19,7 +19,6 @@ class Cell:
         top_right = Point(self.x2, self.y1)
         bottom_left = Point(self.x1, self.y2)
         bottom_right = Point(self.x2, self.y2)
-        
 
         if self.left_wall:
             line = Line(bottom_left, top_left)

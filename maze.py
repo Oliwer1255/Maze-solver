@@ -11,9 +11,9 @@ class Maze:
             num_cols,
             cell_size_x,
             cell_size_y,
-            window,
+            window=None,
         ):
-        self.__cells = []
+        self.cells = []
         self.__x1 = x1
         self.__y1 = y1
         self.__num_rows = num_rows
@@ -38,12 +38,15 @@ class Maze:
                 )
                 cells.append(cell)
 
-            self.__cells.append(cells)
+            self.cells.append(cells)
+
+        if self.__window == None:
+            return
 
         self.__draw_cells()
 
     def __draw_cells(self):
-        for cells in self.__cells:
+        for cells in self.cells:
             for cell in cells:
                 cell.draw()
                 self.__animate()
