@@ -1,18 +1,22 @@
 from window import Window
 from geometry import Point, Line
+from cell import Cell
 
 def main():
     window = Window(800, 600)
 
-    start = Point(300, 500)
-    end = Point(500, 200)
-    line = Line(start, end)
-    window.draw_line(line, "red")
+    cell = Cell(150, 150, 200, 200, window)
+    cell.right_wall = False
+    cell.draw()
 
-    start = Point(400, 300)
-    end = Point(200, 200)
-    line = Line(start, end)
-    window.draw_line(line, "black")
+    cell = Cell(100, 100, 150, 150, window)
+    cell.bottom_wall = False
+    cell.draw()
+
+    cell = Cell(350, 350, 400, 400, window)
+    cell.top_wall = False
+    cell.left_wall = False
+    cell.draw()
 
     window.wait_for_close()
 
