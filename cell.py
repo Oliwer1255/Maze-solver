@@ -8,17 +8,17 @@ class Cell:
         self.right_wall = True
         self.top_wall = True
         self.bottom_wall = True
-        self.__x1 = x1
-        self.__x2 = x2
-        self.__y1 = y1
-        self.__y2 = y2
+        self.x1 = x1
+        self.x2 = x2
+        self.y1 = y1
+        self.y2 = y2
         self.__window = window
 
     def draw(self):
-        top_left = Point(self.__x1, self.__y1)
-        top_right = Point(self.__x2, self.__y1)
-        bottom_left = Point(self.__x1, self.__y2)
-        bottom_right = Point(self.__x2, self.__y2)
+        top_left = Point(self.x1, self.y1)
+        top_right = Point(self.x2, self.y1)
+        bottom_left = Point(self.x1, self.y2)
+        bottom_right = Point(self.x2, self.y2)
         
 
         if self.left_wall:
@@ -33,4 +33,22 @@ class Cell:
         if self.bottom_wall:
             line = Line(bottom_left, bottom_right)
             self.__window.draw_line(line, "black")
+
+    def draw_move(self, to_cell, undo=False):
+        start = Point(
+            self.x1 + (self.x2 - self.x1) // 2, 
+            self.y1 + (self.y2 - self.y1) // 2
+        )
+        end = Point(
+            to_cell.x1 + (to_cell.x2 - to_cell.x1) // 2, 
+            to_cell.y1 + (to_cell.y2 - to_cell.y1) // 2
+        )
+
+        line = Line(start, end)
+
+        if undo:
+            self.__window.draw_line(line, "gray")
+        else:
+            self.__window.draw_line(line, "red")
+            
         

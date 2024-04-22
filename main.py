@@ -5,18 +5,15 @@ from cell import Cell
 def main():
     window = Window(800, 600)
 
-    cell = Cell(150, 150, 200, 200, window)
-    cell.right_wall = False
-    cell.draw()
+    cell1 = Cell(150, 150, 200, 200, window)
+    cell1.right_wall = False
+    cell1.draw()
 
-    cell = Cell(100, 100, 150, 150, window)
-    cell.bottom_wall = False
-    cell.draw()
+    cell2 = Cell(200, 150, 250, 200, window)
+    cell2.left_wall = False
+    cell2.draw()
 
-    cell = Cell(350, 350, 400, 400, window)
-    cell.top_wall = False
-    cell.left_wall = False
-    cell.draw()
+    cell1.draw_move(cell2)
 
     window.wait_for_close()
 
