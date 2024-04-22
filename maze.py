@@ -40,10 +40,8 @@ class Maze:
 
             self.cells.append(cells)
 
-        if self.__window == None:
-            return
-
         self.__draw_cells()
+        self.__break_entrance_and_exit()
 
     def __draw_cells(self):
         for cells in self.cells:
@@ -51,7 +49,16 @@ class Maze:
                 cell.draw()
                 self.__animate()
 
+    def __break_entrance_and_exit(self):
+        self.cells[0][0].top_wall = False
+        self.cells[0][0].draw()
+        self.cells[-1][-1].bottom_wall = False
+        self.cells[-1][-1].draw()
+
     def __animate(self):
+        if self.__window == None:
+            return
+         
         self.__window.redraw()
         time.sleep(0.05)
 

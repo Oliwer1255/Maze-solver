@@ -54,14 +54,19 @@ class Tests(unittest.TestCase):
             num_cols,
         )
 
-    def test_maze_create_cells_5(self):
-        num_cols = 0
-        num_rows = 0
+    def test_break_entrance_and_exit(self):
+        num_cols = 12
+        num_rows = 10
         m1 = Maze(0, 0, num_rows, num_cols, 10, 10)
         self.assertEqual(
-            len(m1.cells),
-            num_rows,
+            m1.cells[0][0].top_wall,
+            False
         )
+        self.assertEqual(
+            m1.cells[-1][-1].bottom_wall,
+            False
+        )
+
         
 
 if __name__ == "__main__":
