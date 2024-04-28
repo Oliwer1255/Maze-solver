@@ -1,5 +1,6 @@
 import time
 import random
+import sys
 from cell import Cell
 
 class Maze:
@@ -46,6 +47,8 @@ class Maze:
 
         self.__draw_cells()
         self.__break_entrance_and_exit()
+        self.__break_walls_r(0, 0)
+        self.__reset_cells_visited()
 
     def __draw_cells(self):
         for cells in self.cells:
@@ -67,27 +70,34 @@ class Maze:
         time.sleep(0.05)
 
     def __break_walls_r(self, i, j):
-        self.cells[i, j].visited = True
+        self.cells[j][i].visited = True
         while True:
             to_visit = []
-            if i - 1 > 0:
-                if not self.cells[j][i - 1].visited:
-                    to_visit.append([i - 1, j, "Left"])
-            if i + 1 < self.__num_cols:
-                if not self.cells[j][i + 1].visited:
-                    to_visit.append([i + 1, j, "Right"])
-            if j - 1 > 0:
-                if not self.cells[j - 1][i].visited:
-                    to_visit.append([i, j - 1, "Up"])
-            if j + 1 < self.__num_rows:
-                if not self.cells[j + 1][i].visited:
-                    to_visit.append([i, j + 1, "Down"])
+            
+            try:
+                if i - 1 > 0:
+                    if not self.cells[j][i - 1].visited:
+                        to_visit.append([i - 1, j, "Left"])
+                if i + 1 < self.__num_cols - 1:
+                    if not self.cells[j][i + 1].visited:
+                        to_visit.append([i + 1, j, "Right"])
+                if j - 1 > 0:
+                    if not self.cells[j - 1][i].visited:
+                        to_visit.append([i, j - 1, "Up"])
+                if j + 1 < self.__num_rows - 1:
+                    if not self.cells[j + 1][i].visited:
+                        to_visit.append([i, j + 1, "Down"])
+            except:
+                print(i)
+            
+            
 
             if len(to_visit) == 0:
                 self.cells[j][i].draw()
                 return
             
-            direction = random.randrange(len(to_visit))
+            direction_index = random.randrange(len(to_visit))
+            direction = to_visit[direction_index]
 
             if direction[2] == "Left":
                 self.cells[j][i].left_wall = False
@@ -102,12 +112,9 @@ class Maze:
                 self.cells[j][i].bottom_wall = False
                 self.cells[direction[1]][direction[0]].top_wall = False
 
-            self.__break_walls_r(direction[1], direction[0])
+            self.__break_walls_r(direction[0], direction[1])
 
-
-
-
-
-
-
-        
+    def __reset_cells_visited(self):
+        for list_of_cells in self.cells:
+            for cell in list_of_cells:
+                cell.visited = False
