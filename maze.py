@@ -1,4 +1,5 @@
 import time
+import random
 from cell import Cell
 
 class Maze:
@@ -11,6 +12,7 @@ class Maze:
             num_cols,
             cell_size_x,
             cell_size_y,
+            seed=None,
             window=None,
         ):
         self.cells = []
@@ -20,6 +22,8 @@ class Maze:
         self.__num_cols = num_cols
         self.__cell_size_x = cell_size_x
         self.__cell_size_y = cell_size_y
+        if seed != None:
+            random.seed(seed)
         self.__window = window
 
         self.__create_cells()
@@ -61,6 +65,49 @@ class Maze:
          
         self.__window.redraw()
         time.sleep(0.05)
+
+    def __break_walls_r(self, i, j):
+        self.cells[i, j].visited = True
+        while True:
+            to_visit = []
+            if i - 1 > 0:
+                if not self.cells[j][i - 1].visited:
+                    to_visit.append([i - 1, j, "Left"])
+            if i + 1 < self.__num_cols:
+                if not self.cells[j][i + 1].visited:
+                    to_visit.append([i + 1, j, "Right"])
+            if j - 1 > 0:
+                if not self.cells[j - 1][i].visited:
+                    to_visit.append([i, j - 1, "Up"])
+            if j + 1 < self.__num_rows:
+                if not self.cells[j + 1][i].visited:
+                    to_visit.append([i, j + 1, "Down"])
+
+            if len(to_visit) == 0:
+                self.cells[j][i].draw()
+                return
+            
+            direction = random.randrange(len(to_visit))
+
+            if direction[2] == "Left":
+                self.cells[j][i].left_wall = False
+                self.cells[direction[1]][direction[0]].right_wall = False
+            if direction[2] == "Right":
+                self.cells[j][i].right_wall = False
+                self.cells[direction[1]][direction[0]].left_wall = False
+            if direction[2] == "Up":
+                self.cells[j][i].top_wall = False
+                self.cells[direction[1]][direction[0]].bottom_wall = False
+            if direction[2] == "Down":
+                self.cells[j][i].bottom_wall = False
+                self.cells[direction[1]][direction[0]].top_wall = False
+
+            self.__break_walls_r(direction[1], direction[0])
+
+
+
+
+
 
 
         
