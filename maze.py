@@ -13,8 +13,8 @@ class Maze:
             num_cols,
             cell_size_x,
             cell_size_y,
-            seed=None,
             window=None,
+            seed=None,
         ):
         self.cells = []
         self.__x1 = x1
@@ -70,28 +70,24 @@ class Maze:
         time.sleep(0.05)
 
     def __break_walls_r(self, i, j):
+        self.__animate()
         self.cells[j][i].visited = True
         while True:
             to_visit = []
             
-            try:
-                if i - 1 > 0:
-                    if not self.cells[j][i - 1].visited:
-                        to_visit.append([i - 1, j, "Left"])
-                if i + 1 < self.__num_cols - 1:
-                    if not self.cells[j][i + 1].visited:
-                        to_visit.append([i + 1, j, "Right"])
-                if j - 1 > 0:
-                    if not self.cells[j - 1][i].visited:
-                        to_visit.append([i, j - 1, "Up"])
-                if j + 1 < self.__num_rows - 1:
-                    if not self.cells[j + 1][i].visited:
-                        to_visit.append([i, j + 1, "Down"])
-            except:
-                print(i)
+            if i - 1 >= 0:
+                if not self.cells[j][i - 1].visited:
+                    to_visit.append([i - 1, j, "Left"])
+            if i + 1 < self.__num_cols:
+                if not self.cells[j][i + 1].visited:
+                    to_visit.append([i + 1, j, "Right"])
+            if j - 1 >= 0:
+                if not self.cells[j - 1][i].visited:
+                    to_visit.append([i, j - 1, "Up"])
+            if j + 1 < self.__num_rows:
+                if not self.cells[j + 1][i].visited:
+                    to_visit.append([i, j + 1, "Down"])
             
-            
-
             if len(to_visit) == 0:
                 self.cells[j][i].draw()
                 return
@@ -118,3 +114,40 @@ class Maze:
         for list_of_cells in self.cells:
             for cell in list_of_cells:
                 cell.visited = False
+
+    def solve(self):
+        return self.__solve_r(0, 0)
+
+    def __solve_r(self, i, j):
+        self.__animate()
+        self.cells[j][i].visited = True
+        if i == self.__num_cols - 1 and j == self.__num_rows - 1:
+            return True
+        
+        to_visit = []
+
+        if i - 1 >= 0:
+            if not self.cells[j][i - 1].right_wall and not self.cells[j][i - 1].visited:
+                to_visit.append([i - 1, j])
+        if i + 1 < self.__num_cols:
+            if not self.cells[j][i + 1].left_wall and not self.cells[j][i + 1].visited:
+                to_visit.append([i + 1, j])
+        if j - 1 >= 0:
+            if not self.cells[j - 1][i].bottom_wall and not self.cells[j - 1][i].visited:
+                to_visit.append([i, j - 1])
+        if j + 1 < self.__num_rows:
+            if not self.cells[j + 1][i].top_wall and not self.cells[j + 1][i].visited:
+                to_visit.append([i, j + 1])
+
+        current_cell = self.cells[j][i]
+
+        for pos in to_visit:
+            current_cell.draw_move(self.cells[pos[1]][pos[0]])
+            if self.__solve_r(pos[0], pos[1]):
+                return True
+            current_cell.draw_move(self.cells[pos[1]][pos[0]], True)
+
+        return False
+        
+        
+
